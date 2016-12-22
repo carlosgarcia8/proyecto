@@ -14,32 +14,18 @@ $this->title = 'Posts';
     <h1 style="text-align:center;"><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]);?>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'showHeader' => false,
-        'summary' => '',
-        'columns' => [
-            [
-                'attribute' => 'titulo',
-                'label' => false,
-            ],
-            [
-                'attribute' => 'votos',
-                'label' => false,
-                'value' => function ($model) {
-                    return 'Votos: ' . $model->votos;
-                },
-            ],
-            array('format' => 'image','value'=>function ($data) {
-                return $data->imageurl;
-            },
-            ),
-            [
-                'attribute' => 'usuario_id',
-                'value' => 'usuario.nick',
-                'label' => false,
-            ],
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+    <table class="table table-condensed" style="width: 500px; margin: 0 auto;">
+        <?php foreach ($posts as $post) {
+    ?>
+    <tr>
+        <td><h1><?= Html::encode($post->titulo) ?></h1></td>
+    </tr>
+    <tr>
+        <td><img src="<?= $post->imageurl ?>" class="img-rounded"></td>
+    </tr>
+    <?php
+
+} ?>
+
+    </table>
 </div>
