@@ -18,8 +18,8 @@ class PostSearch extends Post
     public function rules()
     {
         return [
-            [['id', 'votos', 'usuario_id'], 'integer'],
-            [['titulo', 'ruta', 'extension'], 'safe'],
+            [['id', 'votos'], 'integer'],
+            [['titulo', 'ruta', 'extension', 'usuario_id'], 'safe'],
         ];
     }
 
@@ -41,12 +41,13 @@ class PostSearch extends Post
      */
     public function search($params)
     {
-        $query = Post::find();
+        $query = Post::find()->joinWith('usuario');
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => false,
         ]);
 
         $this->load($params);
@@ -57,16 +58,22 @@ class PostSearch extends Post
             return $dataProvider;
         }
 
+        // $dataProvider->sort->attributes['usuario_id'] = [
+        //     'asc' => ['usuarios.nick' => SORT_ASC],
+        //     'desc' => ['usuarios.nick' => SORT_DESC],
+        // ];
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'votos' => $this->votos,
-            'usuario_id' => $this->usuario_id,
+            'usuario_nick' => $this->usuario_id,
         ]);
 
         $query->andFilterWhere(['like', 'titulo', $this->titulo])
             ->andFilterWhere(['like', 'ruta', $this->ruta])
-            ->andFilterWhere(['like', 'extension', $this->extension]);
+            ->andFilterWhere(['like', 'extension', $this->extension])
+            ->andFilterWhere(['ilike', 'usuarios.nick', $this->usuario_id]);
 
         return $dataProvider;
     }

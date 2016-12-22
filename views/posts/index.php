@@ -8,29 +8,37 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Posts';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="post-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <h1 style="text-align:center;"><?= Html::encode($this->title) ?></h1>
+    <?php // echo $this->render('_search', ['model' => $searchModel]);?>
 
-    <p>
-        <?= Html::a('Create Post', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        'showHeader' => false,
+        'summary' => '',
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'titulo',
-            'votos',
-            'ruta',
-            'extension',
-            // 'usuario_id',
-
+            [
+                'attribute' => 'titulo',
+                'label' => false,
+            ],
+            [
+                'attribute' => 'votos',
+                'label' => false,
+                'value' => function ($model) {
+                    return 'Votos: ' . $model->votos;
+                },
+            ],
+            array('format' => 'image','value'=>function ($data) {
+                return $data->imageurl;
+            },
+            ),
+            [
+                'attribute' => 'usuario_id',
+                'value' => 'usuario.nick',
+                'label' => false,
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use app\models\UploadForm;
 use yii\web\UploadedFile;
 use app\models\Usuario;
+use yii\filters\AccessControl;
 
 /**
  * PostsController implements the CRUD actions for Post model.
@@ -27,6 +28,22 @@ class PostsController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['login', 'logout', 'signup', 'upload'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['login', 'signup'],
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['logout', 'upload'],
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];

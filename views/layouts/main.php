@@ -38,6 +38,9 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Posts', 'url' => ['/posts/index']],
             Yii::$app->user->isGuest ? (
+                ['label' => 'Registrarse', 'url' => ['/site/registrar']]
+                ) : ['label' => 'Upload', 'url' => ['/posts/upload']],
+            Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
                 '<li>'
@@ -49,9 +52,6 @@ AppAsset::register($this);
                 . Html::endForm()
                 . '</li>'
             ),
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Registrarse', 'url' => ['/site/registrar']]
-                ) : ['label' => 'Upload', 'url' => ['/posts/upload']],
         ],
     ]);
     NavBar::end();

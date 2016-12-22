@@ -4,6 +4,10 @@ namespace app\models;
 
 use Yii;
 use app\models\Usuario;
+use yii\imagine\Image;
+use Imagine\Gd;
+use Imagine\Image\Box;
+use Imagine\Image\BoxInterface;
 
 /**
  * This is the model class for table "posts".
@@ -66,10 +70,10 @@ class Post extends \yii\db\ActiveRecord
     {
         if ($this->validate()) {
             $this->imageFile->saveAs(Yii::$app->basePath . '/web/uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
-            // Image::getImagine()
-            //     ->open(Yii::$app->basePath . '/web/uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension)
-            //     ->thumbnail(new Box(300, 300))
-            //     ->save(Yii::$app->basePath . '/web/uploads/' . $this->imageFile->baseName . '-resized.' . $this->imageFile->extension, ['quality' => 90]);
+            $imagen = Image::getImagine()
+                ->open(Yii::$app->basePath . '/web/uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
+            $imagen->thumbnail(new Box(500, $imagen->getSize()->getHeight()))
+                ->save(Yii::$app->basePath . '/web/uploads/' . $this->imageFile->baseName . '-resized.' . $this->imageFile->extension, ['quality' => 90]);
             return true;
         } else {
             return false;
@@ -82,5 +86,10 @@ class Post extends \yii\db\ActiveRecord
     public function getUsuario()
     {
         return $this->hasOne(Usuario::className(), ['id' => 'usuario_id'])->inverseOf('posts');
+    }
+
+    public function getImageurl()
+    {
+        return Yii::$app->request->BaseUrl . '/uploads/' . $this->ruta . '-resized.' . $this->extension;
     }
 }
