@@ -12,7 +12,6 @@ create table posts (
     id          bigserial    constraint pk_posts primary key,
     titulo      varchar(100) not null,
     votos       bigint       not null default 0,
-    ruta        varchar(50)  not null default 'noimage',
     extension   varchar(20)  not null default 'jpg',
     usuario_id  bigint       constraint fk_posts_usuarios references usuarios(id)
         on delete set null on update cascade

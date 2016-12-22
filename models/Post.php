@@ -42,7 +42,6 @@ class Post extends \yii\db\ActiveRecord
             [['titulo', 'imageFile'], 'required'],
             [['votos', 'usuario_id'], 'integer'],
             [['titulo'], 'string', 'max' => 100],
-            [['ruta'], 'string', 'max' => 50],
             [['extension'], 'string', 'max' => 20],
             ['imageFile', 'image', 'extensions' => 'png, jpg',
                 'minWidth' => 500, 'maxWidth' => 2000,
@@ -61,7 +60,6 @@ class Post extends \yii\db\ActiveRecord
             'id' => 'ID',
             'titulo' => 'Titulo',
             'votos' => 'Votos',
-            'ruta' => 'Ruta',
             'extension' => 'Extension',
             'usuario_id' => 'Usuario ID',
         ];
@@ -70,16 +68,13 @@ class Post extends \yii\db\ActiveRecord
     public function upload()
     {
         if ($this->validate()) {
-            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            $model->ruta = $model->imageFile->baseName;
-            $model->extension = $model->imageFile->extension;
-            $model->usuario_id = Usuario::findOne(['nick' => Yii::$app->user->identity->nick])->id;
-            
-            $this->imageFile->saveAs(Yii::$app->basePath . '/web/uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
+            $this->extension = $this->imageFile->extension;
+
+            $this->imageFile->saveAs(Yii::$app->basePath . '/web/uploads/' . $this->id . '.' . $this->extension);
             $imagen = Image::getImagine()
-                ->open(Yii::$app->basePath . '/web/uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
+                ->open(Yii::$app->basePath . '/web/uploads/' . $this->id . '.' . $this->extension);
             $imagen->thumbnail(new Box(500, $imagen->getSize()->getHeight()))
-                ->save(Yii::$app->basePath . '/web/uploads/' . $this->imageFile->baseName . '-resized.' . $this->imageFile->extension, ['quality' => 90]);
+                ->save(Yii::$app->basePath . '/web/uploads/' . $this->id . '-resized.' . $this->extension, ['quality' => 90]);
             return true;
         } else {
             return false;
@@ -96,6 +91,6 @@ class Post extends \yii\db\ActiveRecord
 
     public function getImageurl()
     {
-        return Yii::$app->request->BaseUrl . '/uploads/' . $this->ruta . '-resized.' . $this->extension;
+        return Yii::$app->request->BaseUrl . '/uploads/' . $this->id . '-resized.' . $this->extension;
     }
 }

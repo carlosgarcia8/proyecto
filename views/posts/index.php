@@ -14,7 +14,6 @@ $this->title = 'Posts';
 ?>
 <div class="post-index">
 
-    <h1 style="text-align:center;"><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]);?>
 
     <table style="width: 500px; margin: 0 auto; ">
@@ -24,7 +23,17 @@ $this->title = 'Posts';
         <td><h1><?= Html::encode($post->titulo) ?></h1></td>
     </tr>
     <tr>
-        <td><img src="<?= $post->imageurl ?>" class="img-rounded"></td>
+        <td><?= Html::a(Html::img('' . Html::encode($post->imageurl), ['class' => 'img-rounded', 'style' => 'margin-bottom: 20px;']), ['posts/view', 'id' => $post->id]); ?></td>
+    </tr>
+    <tr>
+        <td>
+            <button type="button" class="btn btn-default btn-lg" aria-label="Left Align">
+              <span class="glyphicon glyphicon-thumbs-up"></span>
+            </button>
+            <button type="button" class="btn btn-default btn-lg" aria-label="Left Align">
+              <span class="glyphicon glyphicon-thumbs-down"></span>
+            </button>
+        </td>
     </tr>
     <?php
 

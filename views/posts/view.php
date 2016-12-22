@@ -33,6 +33,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'usuario.nick',
         ],
     ]) ?>
-    <?= Html::img('@web/uploads/' . $model->ruta . '.' . $model->extension);?>
+    <?= Html::img('@web/uploads/' . $model->id . '-resized.' . $model->extension);?>
 
 </div>

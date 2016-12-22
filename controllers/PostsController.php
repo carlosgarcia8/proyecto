@@ -9,9 +9,10 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\UploadForm;
-use yii\web\UploadedFile;
 use app\models\Usuario;
 use yii\filters\AccessControl;
+use Imagine\Image\BoxInterface;
+use yii\web\UploadedFile;
 
 /**
  * PostsController implements the CRUD actions for Post model.
@@ -107,7 +108,12 @@ class PostsController extends Controller
     public function actionDelete($id)
     {
         $post = $this->findModel($id);
-        unlink(Yii::$app->basePath . '/web/uploads/' . $post->ruta . '.' . $post->extension);
+
+        if (file_exists(Yii::$app->basePath . '/web/uploads/' . $post->id . '.' . $post->extension)) {
+            unlink(Yii::$app->basePath . '/web/uploads/' . $post->id . '.' . $post->extension);
+            unlink(Yii::$app->basePath . '/web/uploads/' . $post->id . '-resized.' . $post->extension);
+        }
+        
         $this->findModel($id)->delete();
         return $this->redirect(['index']);
     }
@@ -117,8 +123,15 @@ class PostsController extends Controller
         $model = new Post();
 
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->upload() && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            $model->usuario_id = Usuario::findOne(['nick' => Yii::$app->user->identity->nick])->id;
+            $imagen = UploadedFile::getInstance($model, 'imageFile');
+
+            if ($imagen !== null) {
+                $model->imageFile = $imagen;
+
+                if ($model->save() && $model->upload()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
             }
         }
         return $this->render('upload', ['model' => $model]);
