@@ -117,12 +117,7 @@ class PostsController extends Controller
         $model = new Post();
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            $model->ruta = $model->imageFile->baseName;
-            $model->extension = $model->imageFile->extension;
-            $model->usuario_id = Usuario::findOne(['nick' => Yii::$app->user->identity->nick])->id;
-
-            if ($model->save() && $model->upload()) {
+            if ($model->upload() && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }

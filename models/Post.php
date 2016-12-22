@@ -8,6 +8,7 @@ use yii\imagine\Image;
 use Imagine\Gd;
 use Imagine\Image\Box;
 use Imagine\Image\BoxInterface;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "posts".
@@ -38,7 +39,7 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['titulo'], 'required'],
+            [['titulo', 'imageFile'], 'required'],
             [['votos', 'usuario_id'], 'integer'],
             [['titulo'], 'string', 'max' => 100],
             [['ruta'], 'string', 'max' => 50],
@@ -69,6 +70,11 @@ class Post extends \yii\db\ActiveRecord
     public function upload()
     {
         if ($this->validate()) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            $model->ruta = $model->imageFile->baseName;
+            $model->extension = $model->imageFile->extension;
+            $model->usuario_id = Usuario::findOne(['nick' => Yii::$app->user->identity->nick])->id;
+            
             $this->imageFile->saveAs(Yii::$app->basePath . '/web/uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
             $imagen = Image::getImagine()
                 ->open(Yii::$app->basePath . '/web/uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);

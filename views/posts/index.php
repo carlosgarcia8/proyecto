@@ -2,6 +2,9 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use app\assets\AppAsset;
+
+AppAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\PostSearch */
@@ -14,7 +17,7 @@ $this->title = 'Posts';
     <h1 style="text-align:center;"><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]);?>
 
-    <table class="table table-condensed" style="width: 500px; margin: 0 auto;">
+    <table style="width: 500px; margin: 0 auto; ">
         <?php foreach ($posts as $post) {
     ?>
     <tr>
