@@ -27,11 +27,15 @@ $this->title = 'Posts';
     </tr>
     <tr>
         <td>
-            <button type="button" class="btn btn-default btn-lg" aria-label="Left Align">
+            <p>Votos: <?= $post->votos ?></p>
+            <button type="button" class="btn btn-default btn-lg" aria-label="Left Align" value="<?= $post->id ?>">
               <span class="glyphicon glyphicon-thumbs-up"></span>
             </button>
-            <button type="button" class="btn btn-default btn-lg" aria-label="Left Align">
+            <button type="button" class="btn btn-default btn-lg" aria-label="Left Align" value="<?= $post->id ?>">
               <span class="glyphicon glyphicon-thumbs-down"></span>
+            </button>
+            <button type="button" class="btn btn-default btn-lg" aria-label="Left Align" value="<?= $post->id ?>">
+              <span class="glyphicon glyphicon-comment"></span>
             </button>
         </td>
     </tr>

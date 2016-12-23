@@ -3,8 +3,10 @@
 namespace app\controllers;
 
 use Yii;
+use LengthException;
 use app\models\Post;
 use app\models\PostSearch;
+use yii\bootstrap\Alert;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -75,8 +77,14 @@ class PostsController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $usuario = Usuario::findOne(['nick' => Yii::$app->user->identity->nick]);
+
+        $autor = $model->usuario_id === $usuario->id ? true : false;
+        
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'autor' => $autor,
         ]);
     }
 
@@ -107,15 +115,21 @@ class PostsController extends Controller
      */
     public function actionDelete($id)
     {
-        $post = $this->findModel($id);
+        $post = Post::findOne(['id' => $id]);
+        $model = $this->findModel($id);
+        if ($post->usuario_id === Yii::$app->user->identity->id) {
+            $post = $this->findModel($id);
 
-        if (file_exists(Yii::$app->basePath . '/web/uploads/' . $post->id . '.' . $post->extension)) {
-            unlink(Yii::$app->basePath . '/web/uploads/' . $post->id . '.' . $post->extension);
-            unlink(Yii::$app->basePath . '/web/uploads/' . $post->id . '-resized.' . $post->extension);
+            if (file_exists(Yii::$app->basePath . '/web/uploads/' . $post->id . '.' . $post->extension)) {
+                unlink(Yii::$app->basePath . '/web/uploads/' . $post->id . '.' . $post->extension);
+                unlink(Yii::$app->basePath . '/web/uploads/' . $post->id . '-resized.' . $post->extension);
+            }
+            $model->delete();
+
+            return $this->redirect(['index']);
         }
-        
-        $this->findModel($id)->delete();
-        return $this->redirect(['index']);
+
+        return $this->render('view', ['model' => $model]);
     }
 
     public function actionUpload()
