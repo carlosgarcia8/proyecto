@@ -78,10 +78,9 @@ class PostsController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        $usuario = Usuario::findOne(['nick' => Yii::$app->user->identity->nick]);
 
-        $autor = $model->usuario_id === $usuario->id ? true : false;
-        
+        $autor = $model->usuario_id === Yii::$app->user->identity->id ? true : false;
+
         return $this->render('view', [
             'model' => $model,
             'autor' => $autor,
@@ -97,13 +96,18 @@ class PostsController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $autor = $model->usuario_id === Yii::$app->user->identity->id ? true : false;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($autor) {
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
         } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+            return $this->render('view', ['model' => $model, 'autor' => $autor]);
         }
     }
 
@@ -115,14 +119,12 @@ class PostsController extends Controller
      */
     public function actionDelete($id)
     {
-        $post = Post::findOne(['id' => $id]);
         $model = $this->findModel($id);
-        if ($post->usuario_id === Yii::$app->user->identity->id) {
-            $post = $this->findModel($id);
 
-            if (file_exists(Yii::$app->basePath . '/web/uploads/' . $post->id . '.' . $post->extension)) {
-                unlink(Yii::$app->basePath . '/web/uploads/' . $post->id . '.' . $post->extension);
-                unlink(Yii::$app->basePath . '/web/uploads/' . $post->id . '-resized.' . $post->extension);
+        if ($model->usuario_id === Yii::$app->user->identity->id) {
+            if (file_exists(Yii::$app->basePath . '/web/uploads/' . $model->id . '.' . $model->extension)) {
+                unlink(Yii::$app->basePath . '/web/uploads/' . $model->id . '.' . $model->extension);
+                unlink(Yii::$app->basePath . '/web/uploads/' . $model->id . '-resized.' . $model->extension);
             }
             $model->delete();
 
