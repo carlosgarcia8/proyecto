@@ -17,7 +17,8 @@ $this->title = $model->titulo;
     <?php if ($autor) {
     ?>
         <p>
-            <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('Update', ['update', 'id' => $model->id], ['class' =>
+            'btn btn-primary']) ?>
             <?= Html::a('Delete', ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-danger',
                 'data' => [

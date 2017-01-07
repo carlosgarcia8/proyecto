@@ -34,12 +34,9 @@ class RegistroForm extends Model
      */
     public function registrar()
     {
-        if ($this->validate()) {
-            $usuario = new Usuario();
-            $usuario->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
-            $usuario->nick = $this->username;
-            $usuario->save();
-        }
-        return false;
+        $usuario = new Usuario();
+        $usuario->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
+        $usuario->nick = $this->username;
+        $usuario->save();
     }
 }

@@ -18,6 +18,7 @@ use yii\web\UploadedFile;
  * @property integer $votos
  * @property string $ruta
  * @property string $extension
+ * @property string $fecha_publicacion
  * @property integer $usuario_id
  *
  * @property Usuarios $usuario
@@ -42,6 +43,7 @@ class Post extends \yii\db\ActiveRecord
             [['titulo', 'imageFile'], 'required'],
             [['votos', 'usuario_id'], 'integer'],
             [['titulo'], 'string', 'max' => 100],
+            [['fecha_publicacion'], 'safe'],
             [['extension'], 'string', 'max' => 20],
             ['imageFile', 'image', 'extensions' => 'png, jpg',
                 'minWidth' => 500, 'maxWidth' => 2000,
@@ -62,6 +64,7 @@ class Post extends \yii\db\ActiveRecord
             'votos' => 'Votos',
             'extension' => 'Extension',
             'usuario_id' => 'Usuario ID',
+            'fecha_publicacion' => 'Fecha de publicación',
         ];
     }
 

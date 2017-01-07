@@ -61,7 +61,7 @@ class PostsController extends Controller
         // $searchModel = new PostSearch();
         // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        $posts = Post::find()->all();
+        $posts = Post::find()->orderBy(['fecha_publicacion' => SORT_DESC])->all();
 
         return $this->render('index', [
             // 'searchModel' => $searchModel,

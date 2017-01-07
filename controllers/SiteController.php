@@ -95,6 +95,9 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             if ($model->validate()) {
                 $model->registrar();
+
+                $model->username = '';
+                $model->password = '';
             }
         }
         return $this->render('registrar', [

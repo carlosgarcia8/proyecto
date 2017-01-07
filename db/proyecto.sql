@@ -9,10 +9,11 @@ create table usuarios (
 
 drop table if exists posts cascade;
 create table posts (
-    id          bigserial    constraint pk_posts primary key,
-    titulo      varchar(100) not null,
-    votos       bigint       not null default 0,
-    extension   varchar(20)  not null default 'jpg',
-    usuario_id  bigint       constraint fk_posts_usuarios references usuarios(id)
-        on delete set null on update cascade
+    id                  bigserial    constraint pk_posts primary key,
+    titulo              varchar(100) not null,
+    votos               bigint       not null default 0,
+    extension           varchar(20)  not null default 'jpg',
+    usuario_id          bigint       constraint fk_posts_usuarios references usuarios(id)
+        on delete set null on update cascade,
+    fecha_publicacion   timestamp with time zone not null default current_timestamp
 );
