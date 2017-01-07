@@ -79,7 +79,11 @@ class PostsController extends Controller
     {
         $model = $this->findModel($id);
 
-        $autor = $model->usuario_id === Yii::$app->user->identity->id ? true : false;
+        if (Yii::$app->user->isGuest) {
+            $autor = false;
+        } else {
+            $autor = $model->usuario_id === Yii::$app->user->identity->id ? true : false;
+        }
 
         return $this->render('view', [
             'model' => $model,
