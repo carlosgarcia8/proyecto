@@ -17,3 +17,14 @@ create table posts (
         on delete set null on update cascade,
     fecha_publicacion   timestamp with time zone not null default current_timestamp
 );
+
+drop table if exists comentarios cascade;
+create table comentarios (
+    id          bigserial     constraint pk_comentarios primary key,
+    cuerpo      varchar(1000) not null,
+    votos       bigint        not null default 0,
+    usuario_id  bigint        constraint fk_comentarios_usuarios references usuarios(id)
+        on delete set null on update cascade,
+    post_id     bigint        constraint fk_comentarios_posts references posts(id)
+        on delete cascade on update cascade
+);

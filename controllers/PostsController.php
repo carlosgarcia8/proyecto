@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use LengthException;
 use app\models\Post;
+use app\models\Comentario;
 use app\models\PostSearch;
 use yii\bootstrap\Alert;
 use yii\web\Controller;
@@ -78,16 +79,18 @@ class PostsController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
+        $comentarios = Comentario::find()->where(['post_id' => $id])->all();
 
         if (Yii::$app->user->isGuest) {
-            $autor = false;
+            $esAutor = false;
         } else {
-            $autor = $model->usuario_id === Yii::$app->user->identity->id ? true : false;
+            $esAutor = $model->usuario_id === Yii::$app->user->identity->id ? true : false;
         }
 
         return $this->render('view', [
             'model' => $model,
-            'autor' => $autor,
+            'esAutor' => $esAutor,
+            'comentarios' => $comentarios,
         ]);
     }
 

@@ -1,6 +1,8 @@
 <?php
 
+use app\models\Comentario;
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -14,7 +16,7 @@ $this->title = $model->titulo;
 <div class="post-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php if ($autor) {
+    <?php if ($esAutor) {
     ?>
         <p>
             <?= Html::a('Update', ['update', 'id' => $model->id], ['class' =>
@@ -31,7 +33,7 @@ $this->title = $model->titulo;
 
 } ?>
 
-    <table>
+    <table class="table">
         <tr>
             <td>
                 <p>Votos: <?= $model->votos ?></p>
@@ -41,15 +43,25 @@ $this->title = $model->titulo;
                 <button type="button" class="btn btn-default btn-lg" aria-label="Left Align" value="<?= $model->id ?>">
                   <span class="glyphicon glyphicon-thumbs-down"></span>
                 </button>
-                <button type="button" class="btn btn-default btn-lg" aria-label="Left Align" value="<?= $model->id ?>">
-                  <span class="glyphicon glyphicon-comment"></span>
-                </button>
             </td>
         </tr>
         <tr>
             <td style="padding-top: 20px;"><?= Html::img('@web/uploads/' . $model->id . '-resized.' . $model->extension);?></td>
+            <td><?php
+
+                $form = ActiveForm::begin();
+                $nuevo = new Comentario; ?>
+
+            <?= $form->field($nuevo, 'cuerpo')->textarea() ?>
+
+            <?php ActiveForm::end(); ?></td>
+            <?php foreach ($comentarios as $comentario) {
+                    ?> <td><h4><?= $comentario->cuerpo ?></h4></td> <?php
+
+                } ?>
         </tr>
     </table>
+
 
 
     <!-- DetailView::widget([

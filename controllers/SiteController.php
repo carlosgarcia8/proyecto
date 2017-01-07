@@ -96,8 +96,7 @@ class SiteController extends Controller
             if ($model->validate()) {
                 $model->registrar();
 
-                $model->username = '';
-                $model->password = '';
+                return $this->redirect(['login']);
             }
         }
         return $this->render('registrar', [
