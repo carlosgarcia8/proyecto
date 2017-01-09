@@ -169,8 +169,10 @@ class PostsController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->usuario_id = Usuario::findOne(['nick' => Yii::$app->user->identity->nick])->id;
             $imagen = UploadedFile::getInstance($model, 'imageFile');
+            $long = $_POST['Post']['long'];
 
-            if ($imagen !== null) {
+            if ($imagen !== null && $long !== '') {
+                $model->longpost = $long > 7000 ? true : false;
                 $model->imageFile = $imagen;
 
                 if ($model->save() && $model->upload()) {

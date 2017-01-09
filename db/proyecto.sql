@@ -14,7 +14,8 @@ create table posts (
     extension           varchar(20)  not null default 'jpg',
     usuario_id          bigint       constraint fk_posts_usuarios references usuarios(id)
         on delete set null on update cascade,
-    fecha_publicacion   timestamp with time zone not null default current_timestamp
+    fecha_publicacion   timestamp with time zone not null default current_timestamp,
+    longpost            bool         not null default false
 );
 
 drop table if exists comentarios cascade;

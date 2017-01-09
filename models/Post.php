@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use app\models\Usuario;
+use Imagine\Image\Point;
 use yii\imagine\Image;
 use Imagine\Gd;
 use Imagine\Image\Box;
@@ -18,6 +19,7 @@ use yii\web\UploadedFile;
  * @property string $ruta
  * @property string $extension
  * @property string $fecha_publicacion
+ * @property bool   $longpost
  * @property integer $usuario_id
  *
  * @property Usuarios $usuario
@@ -25,6 +27,8 @@ use yii\web\UploadedFile;
 class Post extends \yii\db\ActiveRecord
 {
     const SCENARIO_UPLOAD = 'upload';
+
+    public $long;
 
     public $imageFile;
     /**
@@ -46,6 +50,7 @@ class Post extends \yii\db\ActiveRecord
             [['usuario_id'], 'integer'],
             [['titulo'], 'string', 'max' => 100],
             [['fecha_publicacion'], 'safe'],
+            [['longpost'], 'boolean'],
             [['extension'], 'string', 'max' => 20],
             ['imageFile', 'image', 'extensions' => 'png, jpg',
                 'minWidth' => 500, 'maxWidth' => 2000,
@@ -78,7 +83,12 @@ class Post extends \yii\db\ActiveRecord
             $imagen = Image::getImagine()
                 ->open(Yii::$app->basePath . '/web/uploads/' . $this->id . '.' . $this->extension);
             $imagen->thumbnail(new Box(500, $imagen->getSize()->getHeight()))
-                ->save(Yii::$app->basePath . '/web/uploads/' . $this->id . '-resized.' . $this->extension, ['quality' => 90]);
+                    ->save(Yii::$app->basePath . '/web/uploads/' . $this->id . '-resized.' . $this->extension, ['quality' => 90]);
+
+            if ($this->longpost) {
+                $imagen->crop(new Point(0, 0), new Box(500, 260));
+                $imagen->save(Yii::$app->basePath . '/web/uploads/' . $this->id . '-longpost.' . $this->extension, ['quality' => 90]);
+            }
             return true;
         } else {
             return false;
@@ -95,7 +105,11 @@ class Post extends \yii\db\ActiveRecord
 
     public function getImageurl()
     {
-        return Yii::$app->request->BaseUrl . '/uploads/' . $this->id . '-resized.' . $this->extension;
+        if ($this->longpost) {
+            return Yii::$app->request->BaseUrl . '/uploads/' . $this->id . '-longpost.' . $this->extension;
+        } else {
+            return Yii::$app->request->BaseUrl . '/uploads/' . $this->id . '-resized.' . $this->extension;
+        }
     }
 
     public function getUpvotes()
