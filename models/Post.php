@@ -49,7 +49,7 @@ class Post extends \yii\db\ActiveRecord
             [['extension'], 'string', 'max' => 20],
             ['imageFile', 'image', 'extensions' => 'png, jpg',
                 'minWidth' => 500, 'maxWidth' => 2000,
-                'minHeight' => 500, 'maxHeight' => 2000,
+                'minHeight' => 500, 'maxHeight' => 20000,
             ],
             [['usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuario::className(), 'targetAttribute' => ['usuario_id' => 'id']],
         ];
