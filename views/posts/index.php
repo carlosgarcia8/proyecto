@@ -28,6 +28,21 @@ function upvote(id){
         }
     });
 }
+
+function downvote(id){
+    var parametros = {
+        "id" : id
+    };
+
+    $.ajax({
+        data:  parametros,
+        url:   '<?php echo Url::toRoute(['posts/downvote']) ?>',
+        type:  'post',
+        success:  function (response) {
+                $('#' + id).html("Votos: " + response);
+        }
+    });
+}
 </script>
 <div class="post-index">
 
@@ -44,11 +59,13 @@ function upvote(id){
     </tr>
     <tr>
         <td>
-            <p id='<?= $post->id ?>'>Votos: <?= $post->getUpvotes() ?></p>
-            <button type="button" class="btn btn-default btn-lg" aria-label="Left Align" value="<?= $post->id ?>" onclick="upvote(<?= $post->id ?>)">
+            <p id='<?= $post->id ?>'>Votos: <?= $post->getVotos() ?></p>
+            <button type="button" class="btn btn-default btn-lg" aria-label="Left Align" value="<?= $post->id ?>"
+                onclick="upvote(<?= $post->id ?>)">
               <span class="glyphicon glyphicon-thumbs-up"></span>
             </button>
-            <button type="button" class="btn btn-default btn-lg" aria-label="Left Align" value="<?= $post->id ?>">
+            <button type="button" class="btn btn-default btn-lg" aria-label="Left Align" value="<?= $post->id ?>"
+                onclick="downvote(<?= $post->id ?>)">
               <span class="glyphicon glyphicon-thumbs-down"></span>
             </button>
             <button type="button" class="btn btn-default btn-lg" aria-label="Left Align" value="<?= $post->id ?>">

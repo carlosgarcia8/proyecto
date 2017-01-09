@@ -116,4 +116,14 @@ class Post extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Upvote::className(), ['post_id' => 'id'])->count();
     }
+
+    public function getDownvotes()
+    {
+        return $this->hasMany(Downvote::className(), ['post_id' => 'id'])->count();
+    }
+
+    public function getVotos()
+    {
+        return $this->upvotes - $this->downvotes;
+    }
 }

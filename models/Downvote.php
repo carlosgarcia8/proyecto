@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "upvotes".
+ * This is the model class for table "downvotes".
  *
  * @property integer $usuario_id
  * @property integer $post_id
@@ -13,14 +13,14 @@ use Yii;
  * @property Posts $post
  * @property Usuarios $usuario
  */
-class Upvote extends \yii\db\ActiveRecord
+class Downvote extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'upvotes';
+        return 'downvotes';
     }
 
     /**
@@ -29,6 +29,7 @@ class Upvote extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['usuario_id', 'post_id'], 'required'],
             [['usuario_id', 'post_id'], 'integer'],
             [['post_id'], 'exist', 'skipOnError' => true, 'targetClass' => Post::className(), 'targetAttribute' => ['post_id' => 'id']],
             [['usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuario::className(), 'targetAttribute' => ['usuario_id' => 'id']],
@@ -51,7 +52,7 @@ class Upvote extends \yii\db\ActiveRecord
      */
     public function getPost()
     {
-        return $this->hasOne(Post::className(), ['id' => 'post_id'])->inverseOf('upvotes');
+        return $this->hasOne(Post::className(), ['id' => 'post_id'])->inverseOf('downvotes');
     }
 
     /**
@@ -59,6 +60,6 @@ class Upvote extends \yii\db\ActiveRecord
      */
     public function getUsuario()
     {
-        return $this->hasOne(Usuario::className(), ['id' => 'usuario_id'])->inverseOf('upvotes');
+        return $this->hasOne(Usuario::className(), ['id' => 'usuario_id'])->inverseOf('downvotes');
     }
 }

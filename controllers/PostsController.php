@@ -6,6 +6,7 @@ use Yii;
 use LengthException;
 use app\models\Post;
 use app\models\Upvote;
+use app\models\Downvote;
 use app\models\Comentario;
 use app\models\PostSearch;
 use yii\bootstrap\Alert;
@@ -143,6 +144,33 @@ class PostsController extends Controller
         return $this->render('view', ['model' => $model]);
     }
 
+    public function actionDownvote()
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(Url::toRoute(['site/login']));
+        }
+        $id = $_POST['id'];
+        $post = $this->findModel($id);
+
+        $upvoteUser = Upvote::find()->where(['usuario_id' => Yii::$app->user->id, 'post_id' => $id])->one();
+        $downvoteUser = Downvote::find()->where(['usuario_id' => Yii::$app->user->id, 'post_id' => $id])->one();
+
+        if (!empty($upvoteUser)) {
+            $upvoteUser->delete();
+        }
+
+        if (empty($downvoteUser)) {
+            $downvote = new Downvote;
+            $downvote->usuario_id = Yii::$app->user->id;
+            $downvote->post_id = $id;
+            $downvote->save();
+        } else {
+            $downvoteUser->delete();
+        }
+
+        return $post->getVotos();
+    }
+
     public function actionUpvote()
     {
         if (Yii::$app->user->isGuest) {
@@ -150,16 +178,23 @@ class PostsController extends Controller
         }
         $id = $_POST['id'];
         $post = $this->findModel($id);
-        $upvotes = Upvote::find()->where(['usuario_id' => Yii::$app->user->id, 'post_id' => $id])->all();
+        $upvoteUser = Upvote::find()->where(['usuario_id' => Yii::$app->user->id, 'post_id' => $id])->one();
+        $downvoteUser = Downvote::find()->where(['usuario_id' => Yii::$app->user->id, 'post_id' => $id])->one();
 
-        if (empty($upvotes)) {
+        if (!empty($downvoteUser)) {
+            $downvoteUser->delete();
+        }
+
+        if (empty($upvoteUser)) {
             $upvote = new Upvote;
             $upvote->usuario_id = Yii::$app->user->id;
             $upvote->post_id = $id;
             $upvote->save();
+        } else {
+            $upvoteUser->delete();
         }
 
-        return $post->getUpvotes();
+        return $post->getVotos();
     }
 
     public function actionUpload()

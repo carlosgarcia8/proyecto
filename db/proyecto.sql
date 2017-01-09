@@ -31,9 +31,18 @@ create table comentarios (
 
 drop table if exists upvotes cascade;
 create table upvotes (
-    id  bigserial   constraint pk_upvotes primary key,
     usuario_id  bigint        constraint fk_upvotes_usuarios references usuarios(id)
         on delete cascade on update cascade,
     post_id     bigint        constraint fk_upvotes_posts references posts(id)
-        on delete cascade on update cascade
+        on delete cascade on update cascade,
+    constraint pk_upvotes primary key (usuario_id, post_id)
+);
+
+drop table if exists downvotes cascade;
+create table downvotes (
+    usuario_id  bigint        constraint fk_downvotes_usuarios references usuarios(id)
+        on delete cascade on update cascade,
+    post_id     bigint        constraint fk_downvotes_posts references posts(id)
+        on delete cascade on update cascade,
+    constraint pk_downvotes primary key (usuario_id, post_id)
 );
