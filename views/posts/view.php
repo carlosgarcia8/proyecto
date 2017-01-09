@@ -36,7 +36,7 @@ $this->title = $model->titulo;
     <table class="table">
         <tr>
             <td>
-                <p>Votos: <?= $model->votos ?></p>
+                <p>Votos: <?= $model->getUpvotes() ?></p>
                 <button type="button" class="btn btn-default btn-lg" aria-label="Left Align" value="<?= $model->id ?>">
                   <span class="glyphicon glyphicon-thumbs-up"></span>
                 </button>

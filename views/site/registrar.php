@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php $form = ActiveForm::begin(); ?>
 
-        <?= $form->field($model, 'username')->textInput(['style'=>'width:300px']); ?>
+        <?= $form->field($model, 'nick')->textInput(['style'=>'width:300px']); ?>
         <?= $form->field($model, 'password')->passwordInput(['style'=>'width:300px']); ?>
 
         <div class="form-group">

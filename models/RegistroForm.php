@@ -14,7 +14,7 @@ use app\models\Usuario;
  */
 class RegistroForm extends Model
 {
-    public $username;
+    public $nick;
     public $password;
 
     /**
@@ -24,7 +24,8 @@ class RegistroForm extends Model
     {
         return [
             // username and password are both required
-            [['username', 'password'], 'required'],
+            [['nick', 'password'], 'required'],
+            [['nick'], 'unique', 'targetClass' => '\app\models\Usuario']
         ];
     }
 
@@ -36,7 +37,7 @@ class RegistroForm extends Model
     {
         $usuario = new Usuario();
         $usuario->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
-        $usuario->nick = $this->username;
+        $usuario->nick = $this->nick;
         $usuario->save();
     }
 }

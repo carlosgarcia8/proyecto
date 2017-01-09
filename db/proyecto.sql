@@ -11,7 +11,6 @@ drop table if exists posts cascade;
 create table posts (
     id                  bigserial    constraint pk_posts primary key,
     titulo              varchar(100) not null,
-    votos               bigint       not null default 0,
     extension           varchar(20)  not null default 'jpg',
     usuario_id          bigint       constraint fk_posts_usuarios references usuarios(id)
         on delete set null on update cascade,
@@ -26,5 +25,14 @@ create table comentarios (
     usuario_id  bigint        constraint fk_comentarios_usuarios references usuarios(id)
         on delete set null on update cascade,
     post_id     bigint        constraint fk_comentarios_posts references posts(id)
+        on delete cascade on update cascade
+);
+
+drop table if exists upvotes cascade;
+create table upvotes (
+    id  bigserial   constraint pk_upvotes primary key,
+    usuario_id  bigint        constraint fk_upvotes_usuarios references usuarios(id)
+        on delete cascade on update cascade,
+    post_id     bigint        constraint fk_upvotes_posts references posts(id)
         on delete cascade on update cascade
 );

@@ -5,9 +5,11 @@ namespace app\controllers;
 use Yii;
 use LengthException;
 use app\models\Post;
+use app\models\Upvote;
 use app\models\Comentario;
 use app\models\PostSearch;
 use yii\bootstrap\Alert;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -139,6 +141,25 @@ class PostsController extends Controller
         }
 
         return $this->render('view', ['model' => $model]);
+    }
+
+    public function actionUpvote()
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(Url::toRoute(['site/login']));
+        }
+        $id = $_POST['id'];
+        $post = $this->findModel($id);
+        $upvotes = Upvote::find()->where(['usuario_id' => Yii::$app->user->id, 'post_id' => $id])->all();
+
+        if (empty($upvotes)) {
+            $upvote = new Upvote;
+            $upvote->usuario_id = Yii::$app->user->id;
+            $upvote->post_id = $id;
+            $upvote->save();
+        }
+
+        return $post->getUpvotes();
     }
 
     public function actionUpload()

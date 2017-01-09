@@ -15,7 +15,6 @@ use yii\web\UploadedFile;
  *
  * @property integer $id
  * @property string $titulo
- * @property integer $votos
  * @property string $ruta
  * @property string $extension
  * @property string $fecha_publicacion
@@ -25,6 +24,8 @@ use yii\web\UploadedFile;
  */
 class Post extends \yii\db\ActiveRecord
 {
+    const SCENARIO_UPLOAD = 'upload';
+
     public $imageFile;
     /**
      * @inheritdoc
@@ -40,8 +41,9 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['titulo', 'imageFile'], 'required'],
-            [['votos', 'usuario_id'], 'integer'],
+            [['imageFile'], 'required', 'on' => self::SCENARIO_UPLOAD],
+            [['titulo'], 'required'],
+            [['usuario_id'], 'integer'],
             [['titulo'], 'string', 'max' => 100],
             [['fecha_publicacion'], 'safe'],
             [['extension'], 'string', 'max' => 20],
@@ -61,7 +63,6 @@ class Post extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'titulo' => 'Titulo',
-            'votos' => 'Votos',
             'extension' => 'Extension',
             'usuario_id' => 'Usuario ID',
             'fecha_publicacion' => 'Fecha de publicación',
@@ -95,5 +96,10 @@ class Post extends \yii\db\ActiveRecord
     public function getImageurl()
     {
         return Yii::$app->request->BaseUrl . '/uploads/' . $this->id . '-resized.' . $this->extension;
+    }
+
+    public function getUpvotes()
+    {
+        return $this->hasMany(Upvote::className(), ['post_id' => 'id'])->count();
     }
 }

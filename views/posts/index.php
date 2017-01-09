@@ -1,5 +1,6 @@
 <?php
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use app\assets\AppAsset;
@@ -12,6 +13,22 @@ AppAsset::register($this);
 
 $this->title = 'Posts';
 ?>
+<script>
+function upvote(id){
+    var parametros = {
+        "id" : id
+    };
+
+    $.ajax({
+        data:  parametros,
+        url:   '<?php echo Url::toRoute(['posts/upvote']) ?>',
+        type:  'post',
+        success:  function (response) {
+                $('#' + id).html("Votos: " + response);
+        }
+    });
+}
+</script>
 <div class="post-index">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]);?>
@@ -27,8 +44,8 @@ $this->title = 'Posts';
     </tr>
     <tr>
         <td>
-            <p>Votos: <?= $post->votos ?></p>
-            <button type="button" class="btn btn-default btn-lg" aria-label="Left Align" value="<?= $post->id ?>">
+            <p id='<?= $post->id ?>'>Votos: <?= $post->getUpvotes() ?></p>
+            <button type="button" class="btn btn-default btn-lg" aria-label="Left Align" value="<?= $post->id ?>" onclick="upvote(<?= $post->id ?>)">
               <span class="glyphicon glyphicon-thumbs-up"></span>
             </button>
             <button type="button" class="btn btn-default btn-lg" aria-label="Left Align" value="<?= $post->id ?>">
@@ -42,6 +59,7 @@ $this->title = 'Posts';
     <?php
 
 } ?>
-
     </table>
+
+
 </div>
