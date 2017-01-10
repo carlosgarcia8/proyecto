@@ -209,6 +209,7 @@ class PostsController extends Controller
             if ($imagen !== null && $long !== '') {
                 $model->longpost = $long > 7000 ? true : false;
                 $model->imageFile = $imagen;
+                $model->extension = $model->imageFile->extension;
 
                 if ($model->save() && $model->upload()) {
                     return $this->redirect(['view', 'id' => $model->id]);

@@ -52,9 +52,9 @@ class Post extends \yii\db\ActiveRecord
             [['fecha_publicacion'], 'safe'],
             [['longpost'], 'boolean'],
             [['extension'], 'string', 'max' => 20],
-            ['imageFile', 'image', 'extensions' => 'png, jpg',
+            ['imageFile', 'image', 'extensions' => 'png, jpg, gif',
                 'minWidth' => 500, 'maxWidth' => 2000,
-                'minHeight' => 500, 'maxHeight' => 20000,
+                'minHeight' => 260, 'maxHeight' => 20000,
             ],
             [['usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuario::className(), 'targetAttribute' => ['usuario_id' => 'id']],
         ];
@@ -80,6 +80,11 @@ class Post extends \yii\db\ActiveRecord
             $this->extension = $this->imageFile->extension;
 
             $this->imageFile->saveAs(Yii::$app->basePath . '/web/uploads/' . $this->id . '.' . $this->extension);
+
+            if ($this->extension === 'gif') {
+                return true;
+            }
+
             $imagen = Image::getImagine()
                 ->open(Yii::$app->basePath . '/web/uploads/' . $this->id . '.' . $this->extension);
             $imagen->thumbnail(new Box(500, $imagen->getSize()->getHeight()))
@@ -107,6 +112,8 @@ class Post extends \yii\db\ActiveRecord
     {
         if ($this->longpost) {
             return Yii::$app->request->BaseUrl . '/uploads/' . $this->id . '-longpost.' . $this->extension;
+        } elseif ($this->extension === 'gif') {
+            return Yii::$app->request->BaseUrl . '/uploads/' . $this->id . '.' . $this->extension;
         } else {
             return Yii::$app->request->BaseUrl . '/uploads/' . $this->id . '-resized.' . $this->extension;
         }

@@ -46,9 +46,9 @@ $this->title = $model->titulo;
             </td>
         </tr>
         <tr>
-            <td style="padding-top: 20px;"><?= Html::img('@web/uploads/' . $model->id . '-resized.' . $model->extension);?></td>
-            <td><?php
+            <td><?= Html::a(Html::img('' . Html::encode($model->imageurl), ['class' => 'img-rounded', 'style' => 'margin-bottom: 20px;']), ['posts/view', 'id' => $model->id]); ?></td>
 
+            <td><?php
                 $form = ActiveForm::begin();
                 $nuevo = new Comentario; ?>
 
