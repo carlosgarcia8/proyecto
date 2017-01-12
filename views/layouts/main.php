@@ -45,8 +45,13 @@ AppAsset::register($this);
             ) : ([
             'label' => Yii::$app->user->identity->nick,
             'items' => [
-                 ['label' => 'My Profile', 'url' => '#'],
-                 ['label' => 'Settings', 'url' => '#'],
+                 [
+                    'label' => 'My Profile',
+                    'url' => ['/usuarios/view', 'id' => Yii::$app->user->id]
+                 ],
+                 [
+                    'label' => 'Settings',
+                    'url' => ['/usuarios/update', 'id' => Yii::$app->user->id]],
                  [
                     'label' => 'Logout',
                     'url' => ['/site/logout'],
