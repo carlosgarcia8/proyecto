@@ -42,16 +42,17 @@ AppAsset::register($this);
                 ) : ['label' => 'Upload', 'url' => ['/posts/upload']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->nick . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            ),
+            ) : ([
+            'label' => Yii::$app->user->identity->nick,
+            'items' => [
+                 ['label' => 'My Profile', 'url' => '#'],
+                 ['label' => 'Settings', 'url' => '#'],
+                 [
+                    'label' => 'Logout',
+                    'url' => ['/site/logout'],
+                    'linkOptions' => ['data-method' => 'post'],
+                 ],
+            ]])
         ],
     ]);
     NavBar::end();
