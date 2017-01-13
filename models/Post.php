@@ -30,6 +30,8 @@ class Post extends \yii\db\ActiveRecord
 
     public $long;
 
+    private $_upvoteado;
+
     public $imageFile;
     /**
      * @inheritdoc
@@ -54,7 +56,7 @@ class Post extends \yii\db\ActiveRecord
             [['extension'], 'string', 'max' => 20],
             ['imageFile', 'image', 'extensions' => 'png, jpg, gif',
                 'minWidth' => 260, 'maxWidth' => 2000,
-                'minHeight' => 500, 'maxHeight' => 20000,
+                'minHeight' => 300, 'maxHeight' => 20000,
             ],
             [['usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuario::className(), 'targetAttribute' => ['usuario_id' => 'id']],
         ];
@@ -126,16 +128,40 @@ class Post extends \yii\db\ActiveRecord
 
     public function getUpvotes()
     {
-        return $this->hasMany(Upvote::className(), ['post_id' => 'id'])->count();
+        return $this->hasMany(Upvote::className(), ['post_id' => 'id'])->inverseOf('post');
     }
 
     public function getDownvotes()
+    {
+        return $this->hasMany(Downvote::className(), ['post_id' => 'id'])->inverseOf('post');
+    }
+
+    public function getNumeroUpvotes()
+    {
+        return $this->hasMany(Upvote::className(), ['post_id' => 'id'])->count();
+    }
+
+    public function getNumeroDownvotes()
     {
         return $this->hasMany(Downvote::className(), ['post_id' => 'id'])->count();
     }
 
     public function getVotos()
     {
-        return $this->upvotes - $this->downvotes;
+        return $this->numeroUpvotes - $this->numeroDownvotes;
+    }
+
+    public function getUpvoteado()
+    {
+        return $this->getUpvotes()->where([
+            'usuario_id' => Yii::$app->user->id
+            ])->one() !== null;
+    }
+
+    public function getDownvoteado()
+    {
+        return $this->getDownvotes()->where([
+            'usuario_id' => Yii::$app->user->id
+            ])->one() !== null;
     }
 }

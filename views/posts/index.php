@@ -61,15 +61,37 @@ function downvote(id){
         <td>
             <p id='<?= $post->id ?>'>Votos: <?= $post->getVotos() ?></p>
             <button type="button" class="btn btn-default btn-lg" aria-label="Left Align" value="<?= $post->id ?>"
-                onclick="upvote(<?= $post->id ?>)">
-              <span class="glyphicon glyphicon-thumbs-up"></span>
+                    onclick="upvote(<?= $post->id ?>)">
+                <?php if ($post->upvoteado) {
+        ?>
+            <span id="spanUpvote" class="glyphicon glyphicon-heart"></span>
+
+                <?php
+
+    } else {
+        ?>
+                <span id="spanUpvote" class="glyphicon glyphicon-thumbs-up"></span>
+                <?php
+
+    } ?>
             </button>
             <button type="button" class="btn btn-default btn-lg" aria-label="Left Align" value="<?= $post->id ?>"
-                onclick="downvote(<?= $post->id ?>)">
-              <span class="glyphicon glyphicon-thumbs-down"></span>
+                    onclick="downvote(<?= $post->id ?>)">
+                <?php if ($post->downvoteado) {
+        ?>
+            <span id="spanDownvote" class="glyphicon glyphicon-remove"></span>
+
+                <?php
+
+    } else {
+        ?>
+                <span id="spanDownvote" class="glyphicon glyphicon-thumbs-down"></span>
+                <?php
+
+    } ?>
             </button>
             <button type="button" class="btn btn-default btn-lg" aria-label="Left Align" value="<?= $post->id ?>">
-              <span class="glyphicon glyphicon-comment"></span>
+                <span class="glyphicon glyphicon-comment"></span>
             </button>
         </td>
     </tr>

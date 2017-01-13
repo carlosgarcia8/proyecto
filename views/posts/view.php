@@ -46,7 +46,7 @@ $this->title = $model->titulo;
             </td>
         </tr>
         <tr>
-            <td><?= Html::a(Html::img('' . Html::encode($model->imageurlResized), ['class' => 'img-rounded', 'style' => 'margin-bottom: 20px;']), ['posts/view', 'id' => $model->id]); ?></td>
+            <td><?= Html::a(Html::img('' . Html::encode($model->extension == 'gif'?$model->imageurl:$model->imageurlResized), ['class' => 'img-rounded', 'style' => 'margin-bottom: 20px;']), ['posts/view', 'id' => $model->id]); ?></td>
 
             <td><?php
                 $form = ActiveForm::begin();
