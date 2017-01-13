@@ -25,6 +25,7 @@ class RegistroForm extends Model
         return [
             // username and password are both required
             [['nick', 'password'], 'required'],
+            [['password'], 'string', 'min' => 5],
             [['nick'], 'unique', 'targetClass' => '\app\models\Usuario']
         ];
     }

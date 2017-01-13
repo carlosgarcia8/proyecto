@@ -53,8 +53,8 @@ class Post extends \yii\db\ActiveRecord
             [['longpost'], 'boolean'],
             [['extension'], 'string', 'max' => 20],
             ['imageFile', 'image', 'extensions' => 'png, jpg, gif',
-                'minWidth' => 500, 'maxWidth' => 2000,
-                'minHeight' => 260, 'maxHeight' => 20000,
+                'minWidth' => 260, 'maxWidth' => 2000,
+                'minHeight' => 500, 'maxHeight' => 20000,
             ],
             [['usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuario::className(), 'targetAttribute' => ['usuario_id' => 'id']],
         ];
@@ -117,6 +117,11 @@ class Post extends \yii\db\ActiveRecord
         } else {
             return Yii::$app->request->BaseUrl . '/uploads/' . $this->id . '-resized.' . $this->extension;
         }
+    }
+
+    public function getImageurlResized()
+    {
+        return Yii::$app->request->BaseUrl . '/uploads/' . $this->id . '-resized.' . $this->extension;
     }
 
     public function getUpvotes()

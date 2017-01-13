@@ -134,7 +134,12 @@ class PostsController extends Controller
         if ($model->usuario_id === Yii::$app->user->identity->id) {
             if (file_exists(Yii::$app->basePath . '/web/uploads/' . $model->id . '.' . $model->extension)) {
                 unlink(Yii::$app->basePath . '/web/uploads/' . $model->id . '.' . $model->extension);
+            }
+            if (file_exists(Yii::$app->basePath . '/web/uploads/' . $model->id . '-resized.' . $model->extension)) {
                 unlink(Yii::$app->basePath . '/web/uploads/' . $model->id . '-resized.' . $model->extension);
+            }
+            if (file_exists(Yii::$app->basePath . '/web/uploads/' . $model->id . '-longpost.' . $model->extension)) {
+                unlink(Yii::$app->basePath . '/web/uploads/' . $model->id . '-longpost.' . $model->extension);
             }
             $model->delete();
 
