@@ -114,11 +114,11 @@ class Post extends \yii\db\ActiveRecord
     public function getImageurl()
     {
         if ($this->longpost) {
-            return Yii::$app->request->BaseUrl . '/uploads/' . $this->id . '-longpost.' . $this->extension;
+            return '/uploads/' . $this->id . '-longpost.' . $this->extension;
         } elseif ($this->extension === 'gif') {
-            return Yii::$app->request->BaseUrl . '/uploads/' . $this->id . '.' . $this->extension;
+            return '/uploads/' . $this->id . '.' . $this->extension;
         } else {
-            return Yii::$app->request->BaseUrl . '/uploads/' . $this->id . '-resized.' . $this->extension;
+            return '/uploads/' . $this->id . '-resized.' . $this->extension;
         }
     }
 
