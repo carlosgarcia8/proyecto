@@ -38,19 +38,19 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-                'usuario/<id:\d+>' => 'usuarios/view',
-                'usuario/update/<id:\d+>' => 'usuarios/update',
-                'usuarios/index/<sort>' => 'usuarios/index',
-                'usuarios/index/<page:\d+>/<per-page:\d+>' => 'usuarios/index',
-                'posts' => 'posts/index',
-                'posts/<id:\d+>' => 'posts/view',
-                'posts/update/<id:\d+>' => 'posts/update',
-            ],
-        ],
+        // 'urlManager' => [
+        //     'enablePrettyUrl' => true,
+        //     'showScriptName' => false,
+        //     'rules' => [
+        //         'usuario/<id:\d+>' => 'usuarios/view',
+        //         'usuario/update/<id:\d+>' => 'usuarios/update',
+        //         'usuarios/index/<sort>' => 'usuarios/index',
+        //         'usuarios/index/<page:\d+>/<per-page:\d+>' => 'usuarios/index',
+        //         'posts' => 'posts/index',
+        //         'posts/<id:\d+>' => 'posts/view',
+        //         'posts/update/<id:\d+>' => 'posts/update',
+        //     ],
+        // ],
     ],
     'params' => $params,
 ];

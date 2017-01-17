@@ -56,7 +56,7 @@ class Post extends \yii\db\ActiveRecord
             [['imageFile'], 'required', 'on' => self::SCENARIO_UPLOAD],
             ['imageFile', 'image', 'skipOnEmpty' => false,
                 'extensions' => 'png, jpg, gif',
-                'minWidth' => 260, 'maxWidth' => 2000,
+                'minWidth' => 500, 'maxWidth' => 2000,
                 'minHeight' => 300, 'maxHeight' => 20000,
             ],
             [['usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuario::className(), 'targetAttribute' => ['usuario_id' => 'id']],
@@ -114,11 +114,11 @@ class Post extends \yii\db\ActiveRecord
     public function getImageurl()
     {
         if ($this->longpost) {
-            return '/uploads/' . $this->id . '-longpost.' . $this->extension;
+            return 'uploads/' . $this->id . '-longpost.' . $this->extension;
         } elseif ($this->extension === 'gif') {
-            return '/uploads/' . $this->id . '.' . $this->extension;
+            return 'uploads/' . $this->id . '.' . $this->extension;
         } else {
-            return '/uploads/' . $this->id . '-resized.' . $this->extension;
+            return 'uploads/' . $this->id . '-resized.' . $this->extension;
         }
     }
 
