@@ -87,7 +87,7 @@ class PostsController extends Controller
         if (Yii::$app->user->isGuest) {
             $esAutor = false;
         } else {
-            $esAutor = $model->usuario_id === Yii::$app->user->identity->id ? true : false;
+            $esAutor = $model->usuario_id === Yii::$app->user->identity->id;
         }
 
         return $this->render('view', [
@@ -106,9 +106,9 @@ class PostsController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $autor = $model->usuario_id === Yii::$app->user->identity->id ? true : false;
+        $esAutor = $model->usuario_id === Yii::$app->user->identity->id;
 
-        if ($autor) {
+        if ($esAutor) {
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
@@ -117,7 +117,7 @@ class PostsController extends Controller
                 ]);
             }
         } else {
-            return $this->render('view', ['model' => $model, 'autor' => $autor]);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
     }
 
