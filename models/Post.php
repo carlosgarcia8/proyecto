@@ -47,14 +47,15 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['imageFile'], 'required', 'on' => self::SCENARIO_UPLOAD],
             [['titulo'], 'required'],
             [['usuario_id'], 'integer'],
             [['titulo'], 'string', 'max' => 100],
             [['fecha_publicacion'], 'safe'],
             [['longpost'], 'boolean'],
             [['extension'], 'string', 'max' => 20],
-            ['imageFile', 'image', 'extensions' => 'png, jpg, gif',
+            [['imageFile'], 'required', 'on' => self::SCENARIO_UPLOAD],
+            ['imageFile', 'image', 'skipOnEmpty' => false,
+                'extensions' => 'png, jpg, gif',
                 'minWidth' => 260, 'maxWidth' => 2000,
                 'minHeight' => 300, 'maxHeight' => 20000,
             ],
