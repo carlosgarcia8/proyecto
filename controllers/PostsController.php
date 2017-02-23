@@ -65,7 +65,11 @@ class PostsController extends Controller
         // $searchModel = new PostSearch();
         // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        $posts = Post::find()->orderBy(['fecha_publicacion' => SORT_DESC])->all();
+        // $posts = Post::find()->orderBy(['fecha_publicacion' => SORT_DESC])->all();
+        $posts = Post::find()->pending()->all();
+
+        // var_dump($posts);
+        // die();
 
         return $this->render('index', [
             // 'searchModel' => $searchModel,
@@ -215,8 +219,10 @@ class PostsController extends Controller
                 $model->longpost = $long > 7000 ? true : false;
                 $model->imageFile = $imagen;
                 $model->extension = $model->imageFile->extension;
+                $model->markPending();
 
                 if ($model->save() && $model->upload()) {
+
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
             }

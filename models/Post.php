@@ -6,10 +6,9 @@ use Yii;
 use app\models\Usuario;
 use Imagine\Image\Point;
 use yii\imagine\Image;
-use Imagine\Gd;
 use Imagine\Image\Box;
-use Imagine\Image\BoxInterface;
-use yii\web\UploadedFile;
+use yii2mod\moderation\ModerationQuery;
+use yii2mod\moderation\ModerationBehavior;
 
 /**
  * This is the model class for table "posts".
@@ -64,6 +63,20 @@ class Post extends \yii\db\ActiveRecord
     }
 
     /**
+    * @inheritdoc
+    */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => ModerationBehavior::class,
+                'statusAttribute' => 'status_id',
+                // 'moderatedByAttribute' => false,
+            ],
+        ];
+    }
+
+    /**
      * @inheritdoc
      */
     public function attributeLabels()
@@ -75,6 +88,11 @@ class Post extends \yii\db\ActiveRecord
             'usuario_id' => 'Usuario ID',
             'fecha_publicacion' => 'Fecha de publicación',
         ];
+    }
+
+    public static function find()
+    {
+        return new ModerationQuery(get_called_class());
     }
 
     public function upload()
